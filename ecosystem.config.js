@@ -6,9 +6,8 @@ module.exports = {
 
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
       watch: true,
-      instances: 2,
+      instances: 1,
       autorestart: true,
-      exec_mode: 'cluster',
       max_memory_restart: '100M',
       env: {
         NODE_ENV: 'development',
