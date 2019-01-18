@@ -91,6 +91,8 @@ async function main() {
       return res.status(400).json({ status: 'failed', message })
     }
 
+    html += `<p><b>Sender IP:</b> ${req.ip}</p>`
+
     const mailOptions = Object.assign({}, defMailOptions, {
       html,
     })
