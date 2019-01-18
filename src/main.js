@@ -28,27 +28,32 @@ async function main() {
   app.use(bodyParser.json())
 
   const msgLimit = new RateLimit({
-    windowMs: 10 * 60 * 1000, // 2 minutes
-    max: 2, // limit each IP to 10 requests per windowMs
+    windowMs: 10 * 60 * 1000, // 10 minutes
+    max: 2, // limit each IP to 2 requests per windowMs
   })
 
   app.post('/', msgLimit)
 
-  // Generate test SMTP service account from ethereal.email
-  // Only needed if you don't have a real mail account for testing
-  // let account = await nodemailer.createTestAccount();
+  let transporter
 
-  // create reusable transporter object using the default SMTP transport
-  // let transporter = nodemailer.createTransport({
-  //   host: "smtp.ethereal.email",
-  //   port: 587,
-  //   secure: false, // true for 465, false for other ports
-  //   auth: {
-  //     user: account.user, // generated ethereal user
-  //     pass: account.pass // generated ethereal password
-  //   }
-  // });
-  const transporter = nodemailer.createTransport(config.smtpSettings)
+  if (isDev) {
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    const account = await nodemailer.createTestAccount()
+
+    // create reusable transporter object using the default SMTP transport
+    transporter = nodemailer.createTransport({
+      host: 'smtp.ethereal.email',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: account.user, // generated ethereal user
+        pass: account.pass, // generated ethereal password
+      },
+    })
+  } else {
+    transporter = nodemailer.createTransport(config.smtpSettings)
+  }
 
   // setup email data with unicode symbols
   const defMailOptions = {
@@ -62,6 +67,10 @@ async function main() {
   app.post('/', async (req, res) => {
     let html = ''
     let message
+
+    if (req.body.returnURL) {
+      res.setHeader('location', req.body.returnURL)
+    }
 
     const invalid = fieldKeys.some(key => {
       const val = req.body[key]
@@ -87,7 +96,10 @@ async function main() {
     })
 
     try {
-      await transporter.sendMail(mailOptions)
+      const info = await transporter.sendMail(mailOptions)
+      if (isDev) {
+        console.log('sent message', nodemailer.getTestMessageUrl(info))
+      }
       res.status(200).json({ status: 'ok' })
     } catch (err) {
       res.status(500).json({
