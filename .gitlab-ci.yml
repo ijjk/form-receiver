@@ -1,0 +1,10 @@
+image: node:8-jessie
+
+test:
+  stage: test
+  script:
+  - yarn install
+  - yarn build
+  - yarn test
+  only:
+  - master
