@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'form-receiver',
-      script: 'index.js',
+      script: 'dist/server.js',
 
       // Options reference: https://pm2.io/doc/en/runtime/reference/ecosystem-file/
       watch: true,
@@ -10,11 +10,8 @@ module.exports = {
       autorestart: true,
       max_memory_restart: '100M',
       env: {
-        NODE_ENV: 'development',
-      },
-      env_production: {
         NODE_ENV: 'production',
       },
     },
   ],
-}
+};

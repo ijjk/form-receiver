@@ -1,5 +1,5 @@
 // default config, overridden by config.production.js
-export default {
+module.exports = {
   port: 3000,
   trustCloudflare: false,
   from: '"Fred Foo 👻" <foo@example.com>',
@@ -28,4 +28,4 @@ export default {
       maxLength: 1000,
     },
   },
-}
+};
