@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PKGDIR="/opt/mykb"
+PKGDIR="/opt/form-receiver"
 CONFDIR="$PKGDIR/config"
 
 if [ -d "/config" ];then
