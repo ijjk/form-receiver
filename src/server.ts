@@ -46,6 +46,7 @@ async function main() {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 
+  // @ts-ignore
   const msgLimit = new RateLimit({
     windowMs: 10 * 60 * 1000, // 10 minutes
     max: 2, // limit each IP to 2 requests per windowMs
