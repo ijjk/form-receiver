@@ -1,4 +1,5 @@
 import cors from 'cors';
+import path from 'path';
 import helmet from 'helmet';
 import express from 'express';
 import escape from 'escape-html';
@@ -17,8 +18,13 @@ interface Config {
   fields?: any;
 }
 
-const defaultConfig: Config = require('../config/config.default');
-const productionConfig: Config = require('../config/config.production');
+const { CONF_DIR = path.join(__dirname, '../config') } = process.env;
+
+const defaultConfig: Config = require(path.join(CONF_DIR, 'config.default'));
+const productionConfig: Config = require(path.join(
+  CONF_DIR,
+  'config.production'
+));
 
 const app = express();
 const isDev = process.env.NODE_ENV !== 'production';

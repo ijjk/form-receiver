@@ -3,7 +3,9 @@ import path from 'path';
 import express from 'express';
 import fetch from 'node-fetch';
 
-const ips: Array<string> = require('../../config/trustIPs.json');
+const { CONF_DIR = path.join(__dirname, '../../config') } = process.env;
+
+const ips: Array<string> = require(path.join(CONF_DIR, `trustIPs.json`));
 ips.push('loopback');
 
 const cfv4 = 'https://www.cloudflare.com/ips-v4';
