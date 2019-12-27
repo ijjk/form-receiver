@@ -8,12 +8,10 @@ RUN mkdir -p /opt/form-receiver
 # install node_modules to tmp so it can be cached
 RUN mkdir -p /tmp/form-receiver
 COPY package.json /tmp/form-receiver
-RUN cd /tmp/form-receiver && yarn install
+RUN cd /tmp/form-receiver && yarn install --prod
 RUN mv /tmp/form-receiver/node_modules /opt/form-receiver/
 
 COPY . /opt/form-receiver
-RUN cd /opt/form-receiver && yarn build
-RUN cd /opt/form-receiver && yarn install --prod
 RUN rm -rf $(yarn cache dir)
 
 # remove packages from building bcrypt
